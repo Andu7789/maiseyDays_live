@@ -35,6 +35,7 @@ export interface Appointment {
   time: string; // HH:mm
   notes: string;
   status: "pending" | "confirmed" | "cancelled";
+  marketingConsent?: "yes" | "no";
 }
 
 export interface AvailabilitySlot {

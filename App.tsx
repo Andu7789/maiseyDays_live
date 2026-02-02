@@ -26,6 +26,9 @@ const App: React.FC = () => {
   const [carouselAtEnd, setCarouselAtEnd] = useState(false);
   const [unavailableDates, setUnavailableDates] = useState<string[]>([]);
   const [calendarMonth, setCalendarMonth] = useState(new Date());
+  const [agreedToTerms, setAgreedToTerms] = useState(false);
+  const [marketingConsent, setMarketingConsent] = useState<"yes" | "no" | "">(""); 
+  const [showAgreement, setShowAgreement] = useState(false);
 
   const testimonials = [
     { name: "", dog: "Rolo", text: "I would highly recommend Maisey Days Dog Grooming. Both of our dogs go to Rachel and they come home looking and smelling great but also they are happy. She takes her time with them doesn’t rush at all and  we know they are happy with her !!", rating: 5, photo: "/IMG_8141 (1).jpg" },
@@ -151,6 +154,18 @@ const App: React.FC = () => {
     e.preventDefault();
     if (isSubmitting) return;
 
+    // Check if user agreed to terms
+    if (!agreedToTerms) {
+      setBookingError("Please read and agree to the Service Agreement & Privacy Policy to proceed.");
+      return;
+    }
+
+    // Check if marketing consent was selected
+    if (marketingConsent === "") {
+      setBookingError("Please select your marketing consent preference (YES or NO).");
+      return;
+    }
+
     setBookingError(null);
     setIsSubmitting(true);
 
@@ -166,6 +181,7 @@ const App: React.FC = () => {
       time: formData.time || "",
       notes: formData.notes || "",
       status: "pending",
+      marketingConsent: marketingConsent as "yes" | "no",
     };
 
     try {
@@ -186,6 +202,8 @@ const App: React.FC = () => {
         });
         setUploadedPhoto(null);
         setEmailFailed(false);
+        setAgreedToTerms(false);
+        setMarketingConsent("");
       }, 5000);
     } catch (err: any) {
       console.error("Booking failed:", err);
@@ -697,6 +715,70 @@ const App: React.FC = () => {
                       {uploadedPhoto && <p className="mt-2 text-xs text-slate-400">Selected: {uploadedPhoto.name}</p>}
                       <p className="mt-2 text-xs text-slate-400">Accepted: JPG, PNG. Max 5MB.</p>
                     </div>
+                    <div className={`p-6 rounded-2xl border-2 transition-all ${agreedToTerms ? "bg-emerald-50 border-emerald-200" : "bg-rose-50 border-rose-200"}`}>
+                      <label className="flex items-start gap-4 cursor-pointer">
+                        <input
+                          type="checkbox"
+                          checked={agreedToTerms}
+                          onChange={(e) => setAgreedToTerms(e.target.checked)}
+                          className="w-6 h-6 mt-0.5 accent-emerald-600 cursor-pointer"
+                        />
+                        <div className="flex-1">
+                          <span className={`text-sm font-bold ${agreedToTerms ? "text-emerald-700" : "text-rose-700"}`}>
+                            I confirm that I have read, understood, and agree to the{" "}
+                            <button
+                              type="button"
+                              onClick={() => setShowAgreement(true)}
+                              className="underline hover:text-emerald-900 transition-colors font-black"
+                            >
+                              Service Agreement and Privacy Policy
+                            </button>
+                            {" "}of Dirty Dawg / Maisey Days Dog Grooming. I specifically acknowledge the Matting Policy, the £20 deposit requirement, and the 24-hour cancellation fee. I authorise emergency veterinary care at my own expense should it be deemed necessary.
+                          </span>
+                        </div>
+                      </label>
+                    </div>
+                    <div className="bg-white border-2 border-slate-200 p-6 rounded-2xl">
+                      <label className="block text-sm font-bold text-slate-800 mb-4">
+                        Marketing Consent: I agree to the use of my dog's image for social media/advertising
+                      </label>
+                      <div className="flex gap-8">
+                        <label className="flex items-center gap-3 cursor-pointer">
+                          <input
+                            type="radio"
+                            name="marketing"
+                            value="yes"
+                            checked={marketingConsent === "yes"}
+                            onChange={(e) => setMarketingConsent("yes")}
+                            className="w-5 h-5 accent-emerald-600 cursor-pointer"
+                          />
+                          <span className="font-bold text-slate-700">Yes</span>
+                        </label>
+                        <label className="flex items-center gap-3 cursor-pointer">
+                          <input
+                            type="radio"
+                            name="marketing"
+                            value="no"
+                            checked={marketingConsent === "no"}
+                            onChange={(e) => setMarketingConsent("no")}
+                            className="w-5 h-5 accent-slate-400 cursor-pointer"
+                          />
+                          <span className="font-bold text-slate-700">No</span>
+                        </label>
+                      </div>
+                    </div>
+                    {!agreedToTerms && (
+                      <div className="bg-rose-50 border border-rose-200 text-rose-700 px-6 py-4 rounded-2xl text-sm font-bold flex items-start gap-3">
+                        <span className="text-lg mt-0.5">⚠️</span>
+                        <span>You must read and agree to the Service Agreement & Privacy Policy before submitting your booking.</span>
+                      </div>
+                    )}
+                    {marketingConsent === "" && (
+                      <div className="bg-amber-50 border border-amber-200 text-amber-700 px-6 py-4 rounded-2xl text-sm font-bold flex items-start gap-3">
+                        <span className="text-lg mt-0.5">ℹ️</span>
+                        <span>Please select your marketing consent preference (Yes or No).</span>
+                      </div>
+                    )}
                     <div className="flex gap-4">
                       <button type="button" onClick={() => setBookingStep(2)} className="w-1/3 py-5 border-2 border-slate-100 rounded-2xl font-bold text-slate-400 transition-transform active:scale-95">
                         Back
@@ -719,11 +801,86 @@ const App: React.FC = () => {
     }
   };
 
+  // Agreement Modal
+  const AgreementModal = () => (
+    <>
+      {showAgreement && (
+        <div className="fixed inset-0 z-50 bg-black/50 flex items-center justify-center p-4">
+          <div className="bg-white rounded-3xl max-w-2xl w-full max-h-[90vh] overflow-y-auto shadow-2xl">
+            <div className="sticky top-0 bg-gradient-to-r from-teal-600 to-emerald-600 p-8 flex justify-between items-center">
+              <h2 className="text-2xl font-black text-white">Service Agreement & Privacy Policy</h2>
+              <button
+                onClick={() => setShowAgreement(false)}
+                className="text-white text-3xl font-bold hover:opacity-80 transition-opacity"
+              >
+                ✕
+              </button>
+            </div>
+            <div className="p-8 text-slate-700 text-sm leading-relaxed space-y-6">
+              <div>
+                <h3 className="text-lg font-black text-slate-800 mb-3">1. Data Privacy (UK GDPR Compliance)</h3>
+                <p className="mb-3">At Dirty Dawg and Maisey Days, we are committed to protecting your personal data in accordance with UK law.</p>
+                <ul className="space-y-2 ml-4 list-disc">
+                  <li><strong>Data Collection:</strong> We collect your contact details (name, address, phone numbers, email) and your dog's medical, behavioural, and vaccination history.</li>
+                  <li><strong>Purpose:</strong> This data is used solely to manage your bookings, send 24-hour reminders, and ensure your pet's safety during grooming.</li>
+                  <li><strong>Security:</strong> Your information is stored securely and only shared with veterinary professionals in an emergency. We do not sell your data to third parties.</li>
+                  <li><strong>Rights:</strong> You have the right to access, update, or request the deletion of your records at any time.</li>
+                </ul>
+              </div>
+
+              <div>
+                <h3 className="text-lg font-black text-slate-800 mb-3">2. Terms & Conditions of Service</h3>
+                <div className="space-y-3 ml-4">
+                  <div>
+                    <strong>Matting & Welfare:</strong> In compliance with the Animal Welfare Act, pet comfort comes before aesthetics. We will spend no more than 15 minutes attempting to de-mat a coat. If matting is severe, we will clip the coat short to avoid causing your dog unnecessary pain. You acknowledge that a "shave-down" can reveal hidden skin issues or cause irritation; additional fees apply for matted dogs.
+                  </div>
+                  <div>
+                    <strong>Health & Behaviour:</strong> You must disclose any history of aggression or nervous triggers. We reserve the right to use a muzzle or refuse/terminate a groom for safety reasons and the wellbeing of your pet. You authorise us to seek emergency veterinary care at your expense should it be deemed necessary.
+                  </div>
+                  <div>
+                    <strong>Parasites (Fleas & Ticks):</strong> If fleas are found, you must collect your dog immediately to prevent infestation. A minimum £5 sanitisation fee will apply to cover the mandatory deep-cleaning and disinfection of the grooming salon. We may remove up to 3 ticks if safe; otherwise, we will advise a veterinary visit.
+                  </div>
+                  <div>
+                    <strong>Late Fees:</strong> Arrivals more than 30 minutes late may require rescheduling and will be treated as a late cancellation. Late collections are charged at £10 per hour to cover the impact on our schedule and facility use.
+                  </div>
+                </div>
+              </div>
+
+              <div>
+                <h3 className="text-lg font-black text-slate-800 mb-3">3. Deposit & Cancellation Policy</h3>
+                <div className="space-y-3 ml-4">
+                  <div>
+                    <strong>Non-Refundable Deposit:</strong> A £20 deposit is required at the time of booking to secure your appointment. This is deducted from the final groom price.
+                  </div>
+                  <div>
+                    <strong>24-Hour Notice:</strong> We require at least 24 hours' notice for cancellations or rescheduling.
+                  </div>
+                  <div>
+                    <strong>Cancellation Fee:</strong> If you cancel with less than 24 hours' notice, or fail to attend (no-show), a fee of 50% of the full groom price will apply. In these cases, your £20 deposit will be retained and applied toward this fee.
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div className="bg-slate-50 p-8 border-t flex gap-4">
+              <button
+                onClick={() => setShowAgreement(false)}
+                className="flex-1 bg-emerald-600 hover:bg-emerald-700 text-white py-4 rounded-2xl font-bold transition-all"
+              >
+                I Agree & Close
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+    </>
+  );
+
   return (
     <div className="min-h-screen flex flex-col bg-slate-50 selection:bg-teal-100 selection:text-teal-900">
       <Header currentPage={currentPage} setPage={setCurrentPage} />
       <main className="flex-grow">{renderPage()}</main>
       <Footer setPage={setCurrentPage} />
+      <AgreementModal />
       <div className="fixed bottom-4 left-4 z-40">
         <button onClick={() => setCurrentPage(currentPage === "admin" ? "home" : "admin")} className="text-[9px] text-slate-300 hover:text-slate-600 font-black uppercase tracking-[0.2em] transition-colors">
           {currentPage === "admin" ? "Exit Manager" : "Admin Login"}

@@ -215,6 +215,7 @@ Owner: ${appointment.ownername}
 Email: ${appointment.email}
 Phone: ${appointment.phone || "Not provided"}
 Notes: ${appointment.notes || "None"}
+Marketing Consent: ${appointment.marketingConsent ? (appointment.marketingConsent === "yes" ? "YES - May use dog's image for social media/advertising" : "NO - Do not use dog's image") : "Not specified"}
 ${photoLink ? `\nPhoto for ${appointment.dogname} (Owner: ${appointment.ownername}, ${appointment.email}):\n${photoLink}` : "\nNo photo provided"}
     `;
     let response: Response;
