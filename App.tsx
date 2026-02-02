@@ -470,10 +470,10 @@ const App: React.FC = () => {
                 </div>
 
                 <div className="lg:col-span-2">
-                  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 auto-rows-[220px] gap-6">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-6 auto-rows-[280px] sm:auto-rows-[220px]">
                     {galleryItems.map((item, idx) => (
-                      <div key={`gallery-${idx}`} className={`group relative rounded-[2rem] overflow-hidden shadow-md bg-white ${item.featured ? "sm:col-span-2 sm:row-span-2" : ""}`}>
-                        <img src={item.src} alt={`Gallery image ${idx + 1}`} className="w-full h-full object-contain sm:object-cover group-hover:scale-105 transition-transform duration-700" />
+                      <div key={`gallery-${idx}`} className={`group relative rounded-[1.5rem] sm:rounded-[2rem] overflow-hidden shadow-md bg-white ${item.featured ? "sm:col-span-2 sm:row-span-2" : ""}`}>
+                        <img src={item.src} alt={`Gallery image ${idx + 1}`} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" />
                       </div>
                     ))}
                   </div>

@@ -58,7 +58,7 @@ export const LOCATIONS: Location[] = [
     name: "Caister Branch",
     address: "49a high street caister on sea, nr30 5el",
     phone: "07368 465966",
-    hours: "Mon-Sat: 8am - 6pm",
+    hours: "Mon-Sun: 8am - 6pm",
     image: "https://images.unsplash.com/photo-1581579186913-45ac3e6efe93?auto=format&fit=crop&q=80&w=800",
     coordinates: {
       lat: 52.6406,
@@ -70,7 +70,7 @@ export const LOCATIONS: Location[] = [
     name: "Winterton Branch",
     address: "The HoundGround, Winterton, Norwich, nr29 4bx",
     phone: "07368 465966",
-    hours: "Tue-Sun: 9am - 7pm",
+    hours: "Sat-Sun: 9am - 7pm",
     image: "https://images.unsplash.com/photo-1516453174212-3269668380e2?auto=format&fit=crop&q=80&w=800",
     coordinates: {
       lat: 52.7264,
