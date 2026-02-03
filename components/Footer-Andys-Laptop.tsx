@@ -73,24 +73,24 @@ const Footer: React.FC<FooterProps> = ({ setPage }) => {
               </li>
             </ul>
           </div>
-          <div>
+          <div className="md:col-span-2">
             <h4 className="text-white font-bold mb-4">Contact</h4>
             <div className="space-y-4">
-              <div className="space-y-4 text-sm">
+              <div className="flex flex-col sm:flex-row gap-8 text-sm">
                 <div>
-                  <p className="font-semibold text-white text-xs">{LOCATIONS[0].name}</p>
-                  <p className="text-xs">{LOCATIONS[0].address}</p>
-                  <p className="text-xs">{LOCATIONS[0].phone}</p>
+                  <p className="font-semibold text-white">{LOCATIONS[0].name}</p>
+                  <p>{LOCATIONS[0].address}</p>
+                  <p>{LOCATIONS[0].phone}</p>
                 </div>
-                <div className="border-t border-slate-700 pt-2">
-                  <p className="font-semibold text-white text-xs">{LOCATIONS[1].name}</p>
-                  <p className="text-xs">{LOCATIONS[1].address}</p>
-                  <p className="text-xs">{LOCATIONS[1].phone}</p>
+                <div>
+                  <p className="font-semibold text-white">{LOCATIONS[1].name}</p>
+                  <p>{LOCATIONS[1].address}</p>
+                  <p>{LOCATIONS[1].phone}</p>
                 </div>
-                <div className="border-t border-slate-700 pt-2 text-xs">
-                  <p className="font-semibold text-white">{openDays}</p>
-                  <p>9am - 8pm</p>
-                </div>
+              </div>
+              <div className="border-t border-slate-700 pt-4 text-center text-sm">
+                <p className="font-semibold text-white">{openDays}</p>
+                <p>9am - 8pm</p>
               </div>
             </div>
           </div>

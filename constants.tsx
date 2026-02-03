@@ -56,7 +56,7 @@ export const LOCATIONS: Location[] = [
   {
     id: "caister",
     name: "Caister Branch",
-    address: "49a high street caister on sea, nr30 5el",
+    address: "49a High Street, Caister on Sea, NR30 5EL",
     phone: "07368 465966",
     hours: "Mon-Sun: 8am - 6pm",
     image: "https://images.unsplash.com/photo-1581579186913-45ac3e6efe93?auto=format&fit=crop&q=80&w=800",
@@ -68,7 +68,7 @@ export const LOCATIONS: Location[] = [
   {
     id: "winterton",
     name: "Winterton Branch",
-    address: "The HoundGround, Winterton, Norwich, nr29 4bx",
+    address: "The HoundGround, Winterton, Norwich, NR29 4BX",
     phone: "07368 465966",
     hours: "Sat-Sun: 9am - 7pm",
     image: "https://images.unsplash.com/photo-1516453174212-3269668380e2?auto=format&fit=crop&q=80&w=800",

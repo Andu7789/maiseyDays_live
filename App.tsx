@@ -186,25 +186,14 @@ const App: React.FC = () => {
 
     try {
       await saveAppointment(appointment);
-      const emailOk = await sendBookingEmail(appointment, uploadedPhoto);
-      await sendConfirmationEmail(appointment);
+      // Send emails in parallel instead of sequential to speed up confirmation
+      const [emailOk] = await Promise.all([
+        sendBookingEmail(appointment, uploadedPhoto),
+        sendConfirmationEmail(appointment),
+      ]);
       setEmailFailed(!emailOk);
       setShowSuccess(true);
-
-      setTimeout(() => {
-        setShowSuccess(false);
-        setCurrentPage("home");
-        setBookingStep(1);
-        setFormData({
-          locationid: LOCATIONS[0].id,
-          serviceid: SERVICES[0].id,
-          date: new Date(Date.now() + 24 * 60 * 60 * 1000).toISOString().split("T")[0],
-        });
-        setUploadedPhoto(null);
-        setEmailFailed(false);
-        setAgreedToTerms(false);
-        setMarketingConsent("");
-      }, 5000);
+      setIsSubmitting(false);
     } catch (err: any) {
       console.error("Booking failed:", err);
       setBookingError(err.message || "Something went wrong. Please check your connection.");
@@ -473,7 +462,7 @@ const App: React.FC = () => {
                   <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-6 auto-rows-[280px] sm:auto-rows-[220px]">
                     {galleryItems.map((item, idx) => (
                       <div key={`gallery-${idx}`} className={`group relative rounded-[1.5rem] sm:rounded-[2rem] overflow-hidden shadow-md bg-white ${item.featured ? "sm:col-span-2 sm:row-span-2" : ""}`}>
-                        <img src={item.src} alt={`Gallery image ${idx + 1}`} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" />
+                        <img src={item.src} alt={`Gallery image ${idx + 1}`} className="w-full h-full object-contain group-hover:scale-105 transition-transform duration-700" />
                       </div>
                     ))}
                   </div>
@@ -491,11 +480,15 @@ const App: React.FC = () => {
               <img src="/4c3b33ff-5557-415d-beb5-a9ef531d73ae%20(3).jpg" className="w-full h-auto object-contain" />
             </div>
             <div className="text-lg text-slate-500 leading-relaxed font-medium space-y-6 text-left">
-              <p>My grooming journey began with a simple but powerful ethos: to create a calm, compassionate space for nervous and sensitive dogs. My inspiration was Maisey, my German Shepherd, who spent five years teaching me more about behaviour, patience, and trust than any textbook ever could. She is the reason I fell in love with working alongside dogs who need a gentler approach.</p>
+              <p>At Maisey Days Grooming, I work with the simple ethos that every dog deserves a positive and professional grooming experience. I am here to provide a calm, compassionate space, with a particular focus on those who may be nervous or sensitive. I believe grooming shouldn't be an ordeal; my focus is to work towards a positive experience where every dog can learn to enjoy their time with me and feel truly comfortable. There is no better reward for my work than seeing waggy tails coming through the door and being greeted with happy licks from a dog who is excited to see me and feels safe and relaxed in my care.</p>
 
-              <p>In 2020, I qualified as a professional dog groomer, and I now balance my grooming work with my career in teaching and education. Both roles share a common thread, understanding individuals, building confidence, and creating an environment where trust can grow.</p>
+              <p>The inspiration behind my journey is the love I have for my German Shepherd, Maisey. When she came home as a puppy in 2016, her incredibly lively nature was a steep learning curve that I hadn't quite prepared for; I soon discovered that life with Maisey was going to be a whirlwind adventure!</p>
 
-              <p>One of my greatest joys is celebrating the small and the big victories, the dogs who once trembled at the door but now wag their way in, the pups who learn to enjoy the process, and the moments of connection that show just how far we've come. Grooming isn't just about appearance; it's about wellbeing, confidence, and partnership and every dog deserves to feel heard, supported and treated with love and kindness.</p>
+              <p>Our first five years together were a gentle test of heart and soul. We navigated the hurdles of reactivity, a journey that often felt like one step forward and two steps back. There were many moments of tears and frustration, yet through soft perseverance and a deep determination to truly understand one another, we found our way. Maisey has taught me more about behaviour, patience, and trust than any textbook ever could; she was a "pickle"—a beautiful, complex girl who challenged me and showed me the true meaning of a bond. Now ten years old, Maisey remains at the heart of everything I do; she is a constant reminder of how much we can learn from our dogs, and she remains my greatest teacher.</p>
+
+              <p>My journey with Maisey inspired me to become a professional dog groomer, qualifying in 2020. I now balance my grooming work with my career in teaching and education; I find that both roles share a common thread, understanding individuals, building confidence, and creating an environment where trust can grow.</p>
+
+              <p>Customers trust Maisey Days Grooming because I provide a professional service where comfort and wellbeing are my top priorities. I don't just groom your dog; I advocate for their happiness, ensuring their emotional needs are at the heart of every brush, bath, and style. I treat every dog with the same care and devotion I give my own, often chatting and laughing with them along the way.</p>
             </div>
           </div>
         );
