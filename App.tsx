@@ -27,7 +27,7 @@ const App: React.FC = () => {
   const [unavailableDates, setUnavailableDates] = useState<string[]>([]);
   const [calendarMonth, setCalendarMonth] = useState(new Date());
   const [agreedToTerms, setAgreedToTerms] = useState(false);
-  const [marketingConsent, setMarketingConsent] = useState<"yes" | "no" | "">(""); 
+  const [marketingConsent, setMarketingConsent] = useState<"yes" | "no" | "">("");
   const [showAgreement, setShowAgreement] = useState(false);
 
   const testimonials = [
@@ -187,10 +187,7 @@ const App: React.FC = () => {
     try {
       await saveAppointment(appointment);
       // Send emails in parallel instead of sequential to speed up confirmation
-      const [emailOk] = await Promise.all([
-        sendBookingEmail(appointment, uploadedPhoto),
-        sendConfirmationEmail(appointment),
-      ]);
+      const [emailOk] = await Promise.all([sendBookingEmail(appointment, uploadedPhoto), sendConfirmationEmail(appointment)]);
       setEmailFailed(!emailOk);
       setShowSuccess(true);
       setIsSubmitting(false);
@@ -239,14 +236,15 @@ const App: React.FC = () => {
                   <h1 className="text-6xl md:text-8xl font-black mb-6 leading-[0.9] tracking-tighter">
                     WHERE EVERY DOG
                     <br />
-                    <span className="text-emerald-400">IS A VIP</span> <span className="text-3xl md:text-4xl">(Very Important Pup)</span>
+                    <span className="text-emerald-400">IS A VIP</span> <span className="text-3xl md:text-4xl whitespace-nowrap">(Very&nbsp;&nbsp;Important&nbsp;&nbsp;Pup)</span>
                   </h1>
-                  <p className="text-lg md:text-xl mb-8 text-slate-200 font-medium">Thoughtful grooming designed around your dog's well-being. From one-on-one styling to a gentle bath and brush, your pet enjoys a calm, relaxed environment and our undivided attention.</p>
+                  <h2 className="text-[32px] font-bold mb-3 text-slate-200">Grooming with Care and Trust</h2>
+                  <p className="text-[20px] mb-8 text-slate-200">Working with your dog to build confidence, reduce stress and create positive grooming experiences</p>
                   <div className="flex flex-col sm:flex-row gap-4">
                     <button onClick={() => setCurrentPage("booking")} className="bg-emerald-600 hover:bg-emerald-700 text-white px-10 py-5 rounded-3xl font-black text-lg transition-all transform hover:scale-105 shadow-xl shadow-emerald-900/40">
                       BOOK NOW
                     </button>
-                    <button onClick={() => setCurrentPage("services")} className="bg-white/10 backdrop-blur-xl border border-white/20 hover:bg-white/20 text-white px-10 py-5 rounded-3xl font-black text-lg transition-all">
+                    <button onClick={() => setCurrentPage("services")} className="bg-emerald-600 hover:bg-emerald-700 text-white px-10 py-5 rounded-3xl font-black text-lg transition-all transform hover:scale-105 shadow-xl shadow-emerald-900/40">
                       SERVICES
                     </button>
                   </div>
@@ -256,13 +254,8 @@ const App: React.FC = () => {
 
             {/* Features */}
             <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                 {[
-                  {
-                    title: "Cage-Free Focus",
-                    desc: "No stressful enclosures. Your pet is free to roam and relax in a safe, supervised environment.",
-                    icon: "❤️",
-                  },
                   {
                     title: "Premium Products",
                     desc: "We use organic, hypoallergenic shampoos and conditioners suited to your dog's specific skin type.",
@@ -270,7 +263,7 @@ const App: React.FC = () => {
                   },
                   {
                     title: "Safety First",
-                    desc: "Fully insured and first-aid trained groomers. Your pet's safety is our top priority.",
+                    desc: "Fully qualified level 3 dog groomer with 7 years experience, insured and DBS checked.",
                     icon: "🛡️",
                   },
                 ].map((item, idx) => (
@@ -375,7 +368,7 @@ const App: React.FC = () => {
             <section className="bg-teal-600 rounded-[3rem] mx-auto my-20 p-16 max-w-4xl">
               <div className="text-center">
                 <h2 className="text-5xl md:text-6xl font-black text-white mb-6 tracking-tight">Ready to Pamper Your Pet?</h2>
-                <p className="text-xl text-teal-50 mb-10 leading-relaxed">Choose from our Caister or Winterton locations and book your stress-free appointment today.</p>
+                <p className="text-xl text-teal-50 mb-10 leading-relaxed">Choose Winterton-on-Sea or our Caister location to book a grooming appointment tailored to your dogs needs.</p>
                 <button onClick={() => setCurrentPage("booking")} className="bg-white text-teal-600 px-12 py-4 rounded-full font-black text-lg hover:bg-slate-50 transition-all shadow-lg hover:shadow-xl transform hover:scale-105">
                   Start Booking
                 </button>
@@ -434,24 +427,12 @@ const App: React.FC = () => {
                   <div className="bg-white rounded-[2.5rem] p-10 shadow-sm border border-slate-100">
                     <h3 className="text-3xl font-black text-slate-800 mb-4">Why pet parents love us</h3>
                     <p className="text-slate-600 leading-relaxed">We take time to earn trust, especially with nervous pups. Our environment is calm, cage-free, and tailored to each dog’s comfort level.</p>
-                    <div className="mt-8 grid grid-cols-2 gap-4">
-                      {[
-                        { label: "Years Experience", value: "10" },
-                        { label: "Gentle Grooming", value: "100%" },
-                        { label: "Puppy Friendly", value: "Always" },
-                        { label: "One-on-One Care", value: "Always" },
-                      ].map((stat) => (
-                        <div key={stat.label} className="bg-slate-50 rounded-2xl p-4 text-center">
-                          <div className="text-2xl font-black text-emerald-600">{stat.value}</div>
-                          <div className="text-xs uppercase tracking-widest text-slate-500 font-bold mt-1">{stat.label}</div>
-                        </div>
-                      ))}
-                    </div>
+
                   </div>
 
                   <div className="bg-emerald-600 rounded-[2.5rem] p-10 text-white shadow-lg shadow-emerald-500/30">
                     <h3 className="text-3xl font-black mb-4">Ready for a fresh look?</h3>
-                    <p className="text-emerald-50 mb-6">Book a calm, stress-free appointment tailored to your dog’s coat and temperament.</p>
+                    <p className="text-emerald-50 mb-6">Choose from our Winterton-on-Sea or Caister location to book a grooming appointment tailored to your dog's needs.</p>
                     <button onClick={() => setCurrentPage("booking")} className="bg-white text-emerald-700 px-8 py-4 rounded-2xl font-bold uppercase tracking-widest text-sm hover:bg-emerald-50 transition-all">
                       Book an Appointment
                     </button>
@@ -484,11 +465,11 @@ const App: React.FC = () => {
 
               <p>The inspiration behind my journey is the love I have for my German Shepherd, Maisey. When she came home as a puppy in 2016, her incredibly lively nature was a steep learning curve that I hadn't quite prepared for; I soon discovered that life with Maisey was going to be a whirlwind adventure!</p>
 
-              <p>Our first five years together were a gentle test of heart and soul. We navigated the hurdles of reactivity, a journey that often felt like one step forward and two steps back. There were many moments of tears and frustration, yet through soft perseverance and a deep determination to truly understand one another, we found our way. Maisey has taught me more about behaviour, patience, and trust than any textbook ever could; she was a "pickle"—a beautiful, complex girl who challenged me and showed me the true meaning of a bond. Now ten years old, Maisey remains at the heart of everything I do; she is a constant reminder of how much we can learn from our dogs, and she remains my greatest teacher.</p>
+              <p>Our first five years together were a gentle test of heart and soul. We navigated the hurdles of reactivity, a journey that often felt like one step forward and two steps back. There were many moments of tears and frustration, yet through soft perseverance and a deep determination to truly understand one another, we found our way. Maisey has taught me more about behaviour, patience, and trust than any textbook ever could; she was a little pickle, but a beautiful complex girl who challenged me and showed me the true meaning of a bond. Now ten years old, Maisey remains at the heart of everything I do; she is a constant reminder of how much we can learn from our dogs, and she remains my greatest teacher.</p>
 
-              <p>My journey with Maisey inspired me to become a professional dog groomer, qualifying in 2020. I now balance my grooming work with my career in teaching and education; I find that both roles share a common thread, understanding individuals, building confidence, and creating an environment where trust can grow.</p>
+              <p>My journey with Maisey inspired me to become a professional dog groomer, qualifying in 2020. I now balance my grooming work with my career in teaching and education . I find that both roles share a common thread, understanding individuals, building confidence, and creating an environment where trust can grow.</p>
 
-              <p>Customers trust Maisey Days Grooming because I provide a professional service where comfort and wellbeing are my top priorities. I don't just groom your dog; I advocate for their happiness, ensuring their emotional needs are at the heart of every brush, bath, and style. I treat every dog with the same care and devotion I give my own, often chatting and laughing with them along the way.</p>
+              <p>Customers trust Maisey Days grooming because I provide a professional service where comfort and wellbeing are my top priorities. I don't just groom your dog; I advocate for their happiness, ensuring their emotional needs are at the heart of every brush, bath, and style. I treat every dog with the same care and devotion I give my own, often chatting and laughing with them along the way.</p>
             </div>
           </div>
         );
@@ -541,7 +522,19 @@ const App: React.FC = () => {
               <div className="hidden md:flex md:w-1/3 bg-emerald-600 p-12 text-white flex-col justify-between">
                 <div>
                   <div className="w-16 h-16 bg-white/20 rounded-2xl flex items-center justify-center mb-8 text-3xl">🐶</div>
-                  <h1 className="text-4xl font-black mb-4 leading-none uppercase tracking-tighter">{bookingStep === 1 ? "Pet Info" : bookingStep === 2 ? "Schedule" : "Contact"}</h1>
+                  <h1 className="text-4xl font-black mb-4 leading-none uppercase tracking-tighter">{bookingStep === 1 ? "Services" : bookingStep === 2 ? "Schedule" : "Contact"}</h1>
+                  {bookingStep === 1 && (
+                    <div className="text-sm leading-relaxed space-y-4">
+                      <div>
+                        <p className="font-black text-base text-emerald-100 mb-2">Option 1: 30 minute sessions (recommended)</p>
+                        <p className="text-emerald-50">Short, calm sessions help your pup build confidence and become familiar with the sounds, smells and equipment in the grooming environment. Sessions include being handled gently, introduction to equipment, play, treats and plenty of love and reassurance.</p>
+                      </div>
+                      <div>
+                        <p className="font-black text-base text-emerald-100 mb-2">Option 2: 1.5 hours Puppy Groom</p>
+                        <p className="text-emerald-50">For puppies ready for a little more, this session includes a bath, dry, brush, puppy trim, paw tidy and nail trim.</p>
+                      </div>
+                    </div>
+                  )}
                 </div>
                 <div className="space-y-4 text-sm bg-emerald-700/50 p-8 rounded-3xl">
                   {formData.locationid && (
@@ -588,7 +581,7 @@ const App: React.FC = () => {
                       </div>
                     </div>
                     <div>
-                      <label className="block text-xs font-black text-slate-400 uppercase tracking-widest mb-3">Service</label>
+                      <label className="block text-xs font-black text-slate-400 uppercase tracking-widest mb-3">{formData.serviceid === "puppy-intro" ? "Options" : "Service"}</label>
                       <select value={formData.serviceid} onChange={(e) => setFormData({ ...formData, serviceid: e.target.value })} className="w-full px-6 py-4 bg-slate-50 border border-slate-200 rounded-2xl outline-none focus:ring-2 focus:ring-emerald-500 transition-all font-bold">
                         {SERVICES.map((s) => (
                           <option key={s.id} value={s.id}>
@@ -710,52 +703,27 @@ const App: React.FC = () => {
                     </div>
                     <div className={`p-6 rounded-2xl border-2 transition-all ${agreedToTerms ? "bg-emerald-50 border-emerald-200" : "bg-rose-50 border-rose-200"}`}>
                       <label className="flex items-start gap-4 cursor-pointer">
-                        <input
-                          type="checkbox"
-                          checked={agreedToTerms}
-                          onChange={(e) => setAgreedToTerms(e.target.checked)}
-                          className="w-6 h-6 mt-0.5 accent-emerald-600 cursor-pointer"
-                        />
+                        <input type="checkbox" checked={agreedToTerms} onChange={(e) => setAgreedToTerms(e.target.checked)} className="w-6 h-6 mt-0.5 accent-emerald-600 cursor-pointer" />
                         <div className="flex-1">
                           <span className={`text-sm font-bold ${agreedToTerms ? "text-emerald-700" : "text-rose-700"}`}>
                             I confirm that I have read, understood, and agree to the{" "}
-                            <button
-                              type="button"
-                              onClick={() => setShowAgreement(true)}
-                              className="underline hover:text-emerald-900 transition-colors font-black"
-                            >
+                            <button type="button" onClick={() => setShowAgreement(true)} className="underline hover:text-emerald-900 transition-colors font-black">
                               Service Agreement and Privacy Policy
-                            </button>
-                            {" "}of Dirty Dawg / Maisey Days Dog Grooming. I specifically acknowledge the Matting Policy, the £20 deposit requirement, and the 24-hour cancellation fee. I authorise emergency veterinary care at my own expense should it be deemed necessary.
+                            </button>{" "}
+                            of Dirty Dawg / Maisey Days Dog Grooming. I specifically acknowledge the Matting Policy, the £20 deposit requirement, and the 24-hour cancellation fee. I authorise emergency veterinary care at my own expense should it be deemed necessary.
                           </span>
                         </div>
                       </label>
                     </div>
                     <div className="bg-white border-2 border-slate-200 p-6 rounded-2xl">
-                      <label className="block text-sm font-bold text-slate-800 mb-4">
-                        Marketing Consent: I agree to the use of my dog's image for social media/advertising
-                      </label>
+                      <label className="block text-sm font-bold text-slate-800 mb-4">Marketing Consent: I agree to the use of my dog's image for social media/advertising</label>
                       <div className="flex gap-8">
                         <label className="flex items-center gap-3 cursor-pointer">
-                          <input
-                            type="radio"
-                            name="marketing"
-                            value="yes"
-                            checked={marketingConsent === "yes"}
-                            onChange={(e) => setMarketingConsent("yes")}
-                            className="w-5 h-5 accent-emerald-600 cursor-pointer"
-                          />
+                          <input type="radio" name="marketing" value="yes" checked={marketingConsent === "yes"} onChange={(e) => setMarketingConsent("yes")} className="w-5 h-5 accent-emerald-600 cursor-pointer" />
                           <span className="font-bold text-slate-700">Yes</span>
                         </label>
                         <label className="flex items-center gap-3 cursor-pointer">
-                          <input
-                            type="radio"
-                            name="marketing"
-                            value="no"
-                            checked={marketingConsent === "no"}
-                            onChange={(e) => setMarketingConsent("no")}
-                            className="w-5 h-5 accent-slate-400 cursor-pointer"
-                          />
+                          <input type="radio" name="marketing" value="no" checked={marketingConsent === "no"} onChange={(e) => setMarketingConsent("no")} className="w-5 h-5 accent-slate-400 cursor-pointer" />
                           <span className="font-bold text-slate-700">No</span>
                         </label>
                       </div>
@@ -802,10 +770,7 @@ const App: React.FC = () => {
           <div className="bg-white rounded-3xl max-w-2xl w-full max-h-[90vh] overflow-y-auto shadow-2xl">
             <div className="sticky top-0 bg-gradient-to-r from-teal-600 to-emerald-600 p-8 flex justify-between items-center">
               <h2 className="text-2xl font-black text-white">Service Agreement & Privacy Policy</h2>
-              <button
-                onClick={() => setShowAgreement(false)}
-                className="text-white text-3xl font-bold hover:opacity-80 transition-opacity"
-              >
+              <button onClick={() => setShowAgreement(false)} className="text-white text-3xl font-bold hover:opacity-80 transition-opacity">
                 ✕
               </button>
             </div>
@@ -814,10 +779,18 @@ const App: React.FC = () => {
                 <h3 className="text-lg font-black text-slate-800 mb-3">1. Data Privacy (UK GDPR Compliance)</h3>
                 <p className="mb-3">At Dirty Dawg and Maisey Days, we are committed to protecting your personal data in accordance with UK law.</p>
                 <ul className="space-y-2 ml-4 list-disc">
-                  <li><strong>Data Collection:</strong> We collect your contact details (name, address, phone numbers, email) and your dog's medical, behavioural, and vaccination history.</li>
-                  <li><strong>Purpose:</strong> This data is used solely to manage your bookings, send 24-hour reminders, and ensure your pet's safety during grooming.</li>
-                  <li><strong>Security:</strong> Your information is stored securely and only shared with veterinary professionals in an emergency. We do not sell your data to third parties.</li>
-                  <li><strong>Rights:</strong> You have the right to access, update, or request the deletion of your records at any time.</li>
+                  <li>
+                    <strong>Data Collection:</strong> We collect your contact details (name, address, phone numbers, email) and your dog's medical, behavioural, and vaccination history.
+                  </li>
+                  <li>
+                    <strong>Purpose:</strong> This data is used solely to manage your bookings, send 24-hour reminders, and ensure your pet's safety during grooming.
+                  </li>
+                  <li>
+                    <strong>Security:</strong> Your information is stored securely and only shared with veterinary professionals in an emergency. We do not sell your data to third parties.
+                  </li>
+                  <li>
+                    <strong>Rights:</strong> You have the right to access, update, or request the deletion of your records at any time.
+                  </li>
                 </ul>
               </div>
 
@@ -855,10 +828,7 @@ const App: React.FC = () => {
               </div>
             </div>
             <div className="bg-slate-50 p-8 border-t flex gap-4">
-              <button
-                onClick={() => setShowAgreement(false)}
-                className="flex-1 bg-emerald-600 hover:bg-emerald-700 text-white py-4 rounded-2xl font-bold transition-all"
-              >
+              <button onClick={() => setShowAgreement(false)} className="flex-1 bg-emerald-600 hover:bg-emerald-700 text-white py-4 rounded-2xl font-bold transition-all">
                 I Agree & Close
               </button>
             </div>
